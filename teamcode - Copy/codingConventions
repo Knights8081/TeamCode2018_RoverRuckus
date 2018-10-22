@@ -1,0 +1,475 @@
+In this file I will go over some of the common coding conventions that are used in Java.
+
+Comments:
+
+//Single-line comment - generally used for commenting variables or a specific line of code
+
+/*
+ * Multi-line comment - generally used to comment on a small section of code
+ */
+
+/**
+ * Javadoc comment - These comments are the documentation that you read in an API. Generally, you
+ *  you want to have a javadoc before every class and before every function in the class. The
+ *  only exceptions might be any getters and setters, since we all know what those do.
+ *
+ * This type of documentation will usually have some tags on it like the following:
+ *
+ * @author Corbin Young
+ *
+ * @param someParameter - this is generated for functions (including Constructors) that have parameters
+ *
+ * @return someObject - this is generated for a function that returns something (int, double, etc.)
+ *
+ * @throws SomeException - this is generated for a function that throws an exception
+ *
+ * Make sure you don't just give the name of an item for a tag, like someParameter. Make sure
+ *  that you give a comment about it as well. The only one that doesn't require this is @author
+ *
+ * Also, the comments for a javadoc should could before any and all tags. Tags are the last thing
+ *  in a javadoc.
+ *
+ * When you create a javadoc, Java will generate the tags for you. They are generated in the
+ *  following order: param, return, throws. The author tag should only be put in the javadoc
+ *  comment for the class (this one will not be generated).
+ */
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+
+Naming:
+
+The convention for naming any variable or method (except for the constructor) is called camel case
+ (usually written camelCase). This is because all names should start with a lowercase letter. Any
+ new word in the name should start with a capital letter. DO NOT PUT SPACES IN A NAME. YOUR COMPILER
+ WILL YELL AT YOU.
+
+Do:
+thisIsADecentVariableName - this is generally what you should use (though it doesn't need to be this long)
+THISISACONSTANT - this is only used for values that are declared final (constant)
+_thisIsAVariableName - I've only seen this used in languages like C or C++ (not recommended)
+
+Don't:
+this is not a variable name - you're compiler will yell at you for this
+this_is_not_a_good_variable_name - while there are cases that this is acceptable, for the most part it isn't
+ThisIsNotAGoodVariableName - do not start a variable or method name with a capital letter
+
+Also, all variable/class/interface names should be mnemonic, meaning that you should be able to
+ look at the variable name and tell what it is being used for. They don't have to be long necessarily,
+ but you shouldn't have to guess at all. It should be really obvious.
+
+Here's an example if you were adding up values from an array. You would cycle through the array,
+ indexing each value, and adding them to the total.
+
+Do use:
+
+sum - for the total
+index - for the current index that you are at in the array
+tempValue - for the value at each index in the array
+
+Don't use:
+
+x
+y
+z
+i
+j
+k
+r
+c
+
+One-letter names are only really okay if you're just running through a loop or something,
+ but you should still try to avoid it if you can. Don't ever use these for a class variable
+ or parameter. You will spend far more time debugging than you should have to if the name doesn't
+ give you some sort of clue as to what it's being used for.
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+
+Declarations:
+
+In Java, every class, class variable, and method (function) has a declaration.
+ This declaration generally has a group of modifiers before the actual name. First, I'm going to give
+ you the general format for declaring a class, variable, or method. Later, I'll go over what the
+ individual pieces of the declaration mean.
+
+
+METHODS
+
+The general format for a method:
+
+<access modifier> <static or non-static> <abstract?> <final?> <return type> <method name>(<any parameters>)
+
+Here are some examples of what a normal method would look like:
+
+public void talk()
+private static int getNumber()
+public final void setNumber(final int number)
+
+These are all valid method declarations.
+
+NOTE: Constructors are also considered methods, but they are a bit more specific, and their format
+        is a bit different. The only have an access modifier, and the name must be the same as the
+        class.
+
+        <access modifier> ClassName(<any parameters>)
+
+        SIDE NOTE: A constructor with no parameters is called a default constructor. It is generally
+                    advised to make a default constructor even if you're not sure whether or not you
+                    would need to use it.
+
+
+CLASSES
+
+The general format for a class:
+
+<access modifier> <static?> <abstract?> <final?> class ClassName
+
+Here are some examples of what a normal class would look like:
+
+public final class SomeClass
+private static class SomeInternalClass
+public abstract class SomeAbstractClass
+
+I will explain more about the modifiers in a bit, but real quick I want to make two notes:
+
+1) Static is only used for a private, internal class. You would never use static on a normal class.
+2) A class cannot be both abstract and final. Abstract means that the class isn't fully implemented
+    and requires a subclass, while final (in this case) means that you cannot make a subclass from
+    this class. As you might guess, those don't work well together.
+
+   2.1) Static and abstract are only ever used together for an internal class, never for a variable or method.
+
+   2.2) Static and final are only ever used together for a variable or internal class, never for a method.
+
+
+If a class is inheriting from another class, it would look like this:
+
+public class SomeClass extends SomeParentClass
+
+
+If a class is implementing an interface, it would look like this:
+
+public class SomeClass implements SomeInterface
+
+
+If a class both extends another class and implements an interface, the extension would come
+ first, followed by the interface. Also, a class may only extend from ONE other class in Java,
+ but it can implement multiple interfaces. Example:
+
+ public class SomeClass extends SomeParentClass implements SomeInterface, SomeOtherInterface
+
+
+VARIABLES
+
+The general format for a variable:
+
+<access modifier> <static?> <final?> <data type> <variable name>
+
+
+Here are some examples of a normal variable:
+
+private int value
+public static final int MYINT
+
+
+All class variables should generally be made private. If a variable is public, then it is what we
+ call a global variable. THESE ARE VERY BAD. We don't want global variables floating around everywhere
+ that everyone has access to and can change. Now, that being said, while a variable should generally
+ always be made private, we will usually make two methods for it called a getter and a setter. As the
+ names suggest, one method "gets" the variable and the other "sets" it to the desired value. There are
+ multiple reasons why it's preferred to access a variable through its getters and setters instead of
+ directly, and I'm not going to go into them here. Suffice to say, it can cause problems if you don't
+ use the getters and setters. Plus, often times we won't want to make a setter. We might want someone
+ to be able to access and use the variable, but not change its value.
+
+ The alternative to making a getter would be to make a global constant. This is different from a
+ normal global variable because the value of it is constant, meaning that no one can change it. To
+ make something a global constant, you would make it both public and final.
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+
+Modifiers:
+
+Modifiers are how we classify things. I will walk through the groups that I mentioned above in the
+ declarations section. Just to note, there are more than what I've mentioned, but are dependent on
+ the type of program you're writing. Since they're not commonly used, I went ahead and just left them
+ out of this.
+
+
+<Access Modifiers>
+
+Access modifiers determine who has access to the given class/variable/method. There are 4 different
+ access modifiers: private, protected, no modifier (package-private), and public:
+
+ Private - This means that the item it modifies can only be accessed within the class that
+            it was declared in.
+
+ Protected - This means that the item it modifies can only be accessed within either the
+                class that it was declared in, or any subclasses of the class it was declared in.
+
+ No modifier - This is also commonly called package-private. It means that the item it modifies can
+                be accessed within the package that the class it's declared in is in. In other words,
+                only a class that's in the same package (folder) can access it.
+
+ Public - This means that the item it modifies can be accessed by anyone
+
+
+<Static?>
+
+Static is often a very misunderstood modifier. To put it simply, static means that the item it
+ modifies is tied directly to the class it's declared in. If an item is non-static, then that means
+ that it's tied to an instance of the class it's declared in.
+
+Here's an example:
+
+Let's say that I have the following example class:
+
+public class ExampleClass {
+
+    private static int staticValue = 5;
+
+    private int instanceValue;
+
+    public ExampleClass(int someValue) {
+        instanceValue = someValue
+    }
+
+    public static int getStaticValue() {
+        return staticValue;
+    }
+
+    public int getInstanceValue() {
+        return instanceValue;
+    }
+}
+
+Now let's say I create some instances of this class and print out their values:
+
+ExampleClass example1 = new ExampleClass(1);
+
+System.out.println("Static value = " + ExampleClass.getStaticValue());
+System.out.println("Instance value = " + example1.getInstanceValue());
+
+ExampleClass example2 = new ExampleClass(2);
+
+System.out.println("Static value = " + ExampleClass.getStaticValue());
+System.out.println("Instance value = " + example2.getInstanceValue());
+
+The output would be:
+
+Static value = 5
+Instance value = 1
+Static value = 5
+Instance value = 2
+
+As you can see, the static value isn't changing no matter what I set the instance value to. Also,
+ notice how I'm accessing the values. To get the instance values, I reference the specific instance
+ that I created. However, to get the static value, I always reference the class. This is what I mean
+ by something that is static being tied to the class and not an instance. If you tried to do the either
+ of the following, you would get an error:
+
+ 1) example1.getStaticValue()
+
+ 2) ExampleClass.getInstanceValue()
+
+#1 this will work, but it will throw a warning because you're trying to reference something that is
+    static via an instance instead of the class
+
+#2 wouldn't work because you're trying to reference in instance value without an instance.
+
+
+<Abstract?>
+
+As I mentioned above, when something is declared to be abstract, it means that:
+
+    1) If it's a class, it must be extended
+
+    2) If it's a method, it must be overridden
+
+As a rule in Java, you cannot create an instance of an abstract class. This is why abstract classes
+ must be extended. We generally use abstract classes when there are common variables and methods that
+ we want to use across multiple classes. The reason that we would generally make the class abstract
+ is because we want to be able to make a method abstract. Methods cannot be made abstract in a class
+ unless the class is abstract. We use abstract methods because what we're saying is, "Any class that
+ inherits from me is going to have this method, but I don't know how they're going to implement it,
+ so I'm just going to let them tell you." This is why any class that inherits from an abstract class
+ must either implement all abstract methods in the parent class, or else must be declared abstract
+ as well.
+
+
+<Final?>
+
+Final means a couple different things depending on the context, so I'm going to list out some
+ different items and tell you what the final modifier would do to each of them.
+
+ Class - This class cannot be extended
+
+ Variable - The value of this variable cannot be changed once set
+
+ Method - This method cannot be overridden
+
+ Parameter - The value of this parameter cannot be changed
+
+
+<Return type> or <data type>
+
+These are basically the same thing. A return type is used for a method, and a data type it used for
+ a variable. Both simply specify the type of something, like Object, int, double, String, etc.
+
+The return type for a method is the type of object that it will return. Another common return type
+ is void, which means that the method will not return anything. It will just do something and then
+ quit.
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+
+Curly brackets:
+
+There are a couple conventions when it comes to the usage of curly brackets. Generally there are two
+ common ways that people use them, shown below:
+
+
+ public void blankMethod() {
+    //This is the way that I prefer
+ }
+
+ public void otherBlankMethod()
+ {
+    //This is how some people like to do it
+ }
+
+Either way is acceptable. It just comes down to personal preference. However, make sure that you are
+ consistent. Don't change how you use them, and make sure that if you're working in a group,
+ that everyone is doing it the same way. It will make the code easier to follow.
+
+Also, MAKE SURE YOU INDENT! The actual amount of indentation is up for debate, but what isn't is that
+ you need to do it. It makes code way harder to read and debug if there isn't proper indentation.
+ There are a lot of errors that are caused because people thought that something was a part of some
+ loop or if-statement and it wasn't, or vice versa. Proper indentation is the best way to avoid these
+ logic errors.
+
+Also, final note on this: There are times when you can avoid using curly brackets. If you write
+ something like a while-loop, or a for-loop, or an if-statement, and the body only has one line,
+ then you don't need to use them. However, if the body is more than one line, they are required.
+
+Here's an example of not needing curly brackets:
+
+if(true)
+    System.out.println("TRUE");
+else
+    System.out.println("FALSE");
+
+
+Here's an example of needing brackets:
+
+if(true) {
+    int x = Math.pow(2, 5);              //x = 2^5
+    System.out.println("x = " + x);      //x = 32
+}
+else
+    System.out.println("You'll never get here");
+
+
+The exception to this is any method or constructor. Even if their body is only one line, methods
+ and constructors must always have brackets
+
+/* --------------------------------------------------------------------------------------------- */
+
+Bracket types:
+
+These are the types of brackets and how to refer to them.
+
+Curly brackets - {}
+
+Angle brackets - <>
+
+Parentheses - ()
+
+Square brackets - []
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+Errors:
+
+This specific section will deal with more than just Java. What I'm going to discuss here can be seen
+ in any programming language. Obviously, errors occur everywhere, but I'm going to be talking about
+ two specific kinds of errors: syntax and logic
+
+SYNTAX
+
+Syntax errors are the nice ones. I say this because they are the ones that you don't have to worry
+ about catching. These are things that the compiler catches for you. Another term for a syntax error
+ would be a compile-time error. We like it when these are the problem because not only are they easy
+ to see, but depending on the IDE (Integrated Development Environment) that you're using, you will
+ even be given suggestions on how to fix the error, some of which can even be done automatically once
+ you indicate that that's what you want to do.
+
+
+LOGIC
+
+These are the nightmares of programmers. Logic errors are the ones that every programmer prays that
+ they don't have. Why? Because you won't see it coming. Logic errors, a.k.a. run-time errors, as the
+ name suggests, are only caught at run-time. They are not something that your compiler will catch for
+ you. Your program will be working just fine, and then all of a sudden something will happen and the
+ whole thing will just stop working. This is usually do to a logic error.
+
+There are ways to prevent logic errors, but none of them are fool-proof or catch-all. And none of them
+ are all that simple to do. The two biggest things that you can do to prevent logic errors are:
+
+ 1) Design your system well - some things can be caught in the design phase because you will be able
+                                to see that it doesn't work the way that you were thinking based on
+                                how things are supposed to work together
+
+ 2) Test any and all code that you write as much as you can - I will go over this in the next section
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+
+Testing:
+
+There are 3 major types of tests that are generally categorized based on the amount of code involved
+ in the testing. The 3 types are as follows:
+
+ 1) Unit (smallest)
+
+ 2) Integration
+
+ 3) UI (largest)
+
+Unit tests are tests that only deal with one particular thing, like a class or even just a specific
+ function. They are meant to test the corner cases for the class/function. A corner case is basically
+ something that may or may not be likely to happen, but if it did happen then it could potentially
+ break the whole program. For example, what if I needed the user to provide some input for a function
+ that I wanted to use. I would want to test using that function with multiple cases of user input to
+ make sure that the function would properly do what I intend. Often times, it is a good idea to limit
+ the amount or type of user input to ensure that it will work as intended.
+
+Integration testing is a bit more in-depth. Integration testing involves testing how multiple classes
+ will work together and communicate. If you're programming on a system, these tests can also be done
+ on the system to make sure that things will work on the system as expected. However, these tests are
+ still relatively small. They aren't meant to do a bunch of different things. They're only for
+ checking minimal usage on the system.
+
+UI tests are the largest tests. These tests are designed to see how the overall system will work.
+ These are the kinds of tests that would be tested by an actual user to make sure that everything
+ works according to the user's input and direction.
+
+
+In general, because unit tests are rather small comparatively, there should be a lot of them. If we
+ can verify that the functionality of a class is good, then we know that an error in the system
+ wouldn't be caused by that class. On the flip side, because UI tests attempt to test the system as
+ a whole, there are usually only a few of them because they are extremely difficult to write and are
+ rather big.
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+I hope this guide was helpful :)
